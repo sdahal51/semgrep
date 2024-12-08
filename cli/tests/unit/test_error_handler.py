@@ -63,7 +63,7 @@ def fail_open_mock(requests_mock):
 
 @handle_command_errors
 def fake_command():
-    requests.get("https://semgrep.dev/api/agent/deployments/current")
+    requests.get("https://semgrep.dev/api/agent/deployments/current", timeout=60)
 
 
 @pytest.mark.quick
