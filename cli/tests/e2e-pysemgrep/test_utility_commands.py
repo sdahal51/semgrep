@@ -21,7 +21,7 @@ def test_dump_command_for_core():
         encoding="utf-8",
     )
 
-    result = subprocess.run(semgrep_core_command, shell=True)
+    result = subprocess.run(semgrep_core_command, shell=False)
 
     assert result.returncode == 0
 
