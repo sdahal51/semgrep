@@ -53,6 +53,7 @@ from semgrep.state import get_state
 from semgrep.target_manager import TargetManager
 from semgrep.target_mode import TargetModeConfig
 from semgrep.verbose_logging import getLogger
+from security import safe_command
 
 logger = getLogger(__name__)
 
@@ -85,8 +86,7 @@ def get_contributions(engine_type: EngineType) -> out.Contributions:
 
     try:
         # nosemgrep: python.lang.security.audit.dangerous-subprocess-use.dangerous-subprocess-use
-        raw_output = subprocess.run(
-            cmd,
+        raw_output = safe_command.run(subprocess.run, cmd,
             timeout=env.git_command_timeout,
             capture_output=True,
             encoding="utf-8",
