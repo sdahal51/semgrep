@@ -9,8 +9,6 @@ from pathlib import Path
 from typing import Any
 from typing import Dict
 from typing import Optional
-
-import requests
 from boltons.cacheutils import cachedproperty
 from glom import glom
 from glom import T
@@ -22,6 +20,7 @@ from semgrep.external.git_url_parser import Parser
 from semgrep.git import git_check_output
 from semgrep.state import get_state
 from semgrep.verbose_logging import getLogger
+from security import safe_requests
 
 logger = getLogger(__name__)
 
@@ -482,7 +481,7 @@ class GithubMeta(GitMeta):
             logger.debug("Trying to get merge base using GitHub API")
             try:
                 headers = {"Authorization": f"Bearer {self.gh_token}"}
-                req = requests.get(
+                req = safe_requests.get(
                     f"{self.api_url}/repos/{self.repo_name}/compare/{self.base_branch_hash}...{self.head_branch_hash}",
                     headers=headers,
                 )
