@@ -26,6 +26,7 @@ from typing import Sequence
 from typing import Union
 
 from click.testing import CliRunner
+from security import safe_command
 
 ##############################################################################
 # Constants
@@ -116,7 +117,7 @@ def fork_semgrep(
     full_env = dict(os.environ, **env_dict)
 
     # let's fork and use a pipe to communicate with the external semgrep
-    proc = Popen(argv, stdout=PIPE, stderr=PIPE, env=full_env)
+    proc = safe_command.run(Popen, argv, stdout=PIPE, stderr=PIPE, env=full_env)
     stdout, stderr = proc.communicate()
     return Result(proc.returncode, stdout.decode("utf-8"), stderr.decode("utf-8"))
 

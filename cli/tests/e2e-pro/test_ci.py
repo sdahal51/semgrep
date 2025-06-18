@@ -41,6 +41,7 @@ from semgrep.meta import GitlabMeta
 from semgrep.meta import GitMeta
 from semgrep.metrics import Metrics
 from semgrep.settings import generate_anonymous_user_id
+from security import safe_command
 
 ##############################################################################
 # Constants
@@ -76,8 +77,7 @@ DUMMY_APP_TOKEN_BOB = "coolcucumber"
 # the app code uses, so the tests can enforce the env is mocked appropriately.
 _cli_src = (Path(__file__).parent.parent.parent / "src").resolve()
 USED_GITHUB_VARS = set(
-    subprocess.run(
-        f"git grep --recurse-submodules -hPo 'GITHUB_[\\w_]*' {_cli_src}",
+    safe_command.run(subprocess.run, f"git grep --recurse-submodules -hPo 'GITHUB_[\\w_]*' {_cli_src}",
         shell=True,
         capture_output=True,
         check=True,

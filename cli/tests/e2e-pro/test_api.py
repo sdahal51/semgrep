@@ -11,6 +11,7 @@ import pytest
 from tests.fixtures import RunSemgrep
 
 from semgrep.run_scan import run_scan_and_return_json
+from security import safe_command
 
 
 # When calling osemgrep, stderr isn't available via this 'capsys' object,
@@ -45,8 +46,7 @@ def test_api_via_cli(unique_home_dir, run_semgrep_in_tmp: RunSemgrep):
     # Assign env var for settings.yaml to the per-test unique home directory
     # so it doesn't use the default (~/.semgrep/settings.yaml)
     env["SEMGREP_SETTINGS_FILE"] = str(unique_home_dir / ".semgrep/settings.yaml")
-    x = subprocess.run(
-        [
+    x = safe_command.run(subprocess.run, [
             sys.executable,
             "-c",
             "from semgrep.run_scan import run_scan_and_return_json; from pathlib import Path; run_scan_and_return_json(Path('rules/eqeq.yaml'),[Path('targets/bad/invalid_python.py'), Path('targets/basic/stupid.py')],)",

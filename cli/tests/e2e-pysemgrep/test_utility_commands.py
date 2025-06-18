@@ -3,6 +3,7 @@ import subprocess
 
 import pytest
 from tests.semgrep_runner import SEMGREP_BASE_SCAN_COMMAND
+from security import safe_command
 
 # used to be in e2e/test_utility_commands.py
 
@@ -21,7 +22,7 @@ def test_dump_command_for_core():
         encoding="utf-8",
     )
 
-    result = subprocess.run(semgrep_core_command, shell=True)
+    result = safe_command.run(subprocess.run, semgrep_core_command, shell=True)
 
     assert result.returncode == 0
 
