@@ -8,10 +8,10 @@ import tempfile
 from typing import Sequence
 
 import click
-import requests
 from ruamel import yaml
 
 from semgrep.semgrep_types import LANGUAGE
+from security import safe_requests
 
 
 SEMGREP_DEV_TIMEOUT_S = 30.0
@@ -48,7 +48,7 @@ def compare(start: str, end: str, snippet: str, use_podman: bool) -> int:
     url = f"https://semgrep.dev/api/registry/{collection_path}/{snippet}?definition=1&test_cases=1"
     headers = {"Accept": "application/json"}
     # nosemgrep: python.flask.security.injection.ssrf-requests.ssrf-requests
-    data = requests.get(url, timeout=SEMGREP_DEV_TIMEOUT_S, headers=headers).json()
+    data = safe_requests.get(url, timeout=SEMGREP_DEV_TIMEOUT_S, headers=headers).json()
     data = data["rules"][0] if is_ruleset else data
 
     definition = data["definition"]
